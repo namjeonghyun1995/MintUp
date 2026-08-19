@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{CYAN} %highlight{%-5level}{FATAL=bg_red white, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue, TRACE=magenta} %style{[%t]}{dim} %style{%logger{36}}{cyan} - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- 프로젝트 로그 -->
+        <Logger name="com.badminton.mintup" level="DEBUG"/>
+        <!-- Spring Security 로그 -->
+        <Logger name="org.springframework.security" level="DEBUG"/>
+        <!-- MyBatis -->
+        <Logger name="org.mybatis" level="DEBUG"/>
+        <Logger name="org.mybatis.spring" level="DEBUG"/>
+        <!-- Mapper -->
+        <Logger name="com.badminton.mintup.mapper" level="DEBUG"/>
+        <!-- Root -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

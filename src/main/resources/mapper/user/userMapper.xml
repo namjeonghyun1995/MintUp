@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.badminton.mintup.dao.UserDao">
+
+    <select id="userInfo" resultType="com.badminton.mintup.vo.UserVo$UserInfoVo">
+        select
+            id
+            , user_id
+            , password
+            , nickname
+            , email
+            , mphon_no
+            , reg_dt
+            , corr_dt
+            , regr_id
+            , amd_id
+        from mintup.tbl_mu_user
+        where id = 1
+    </select>
+
+    <select id="findByUserId" resultType="com.badminton.mintup.vo.UserVo$UserInfoVo">
+        select
+            id
+            , user_id
+            , password
+            , nickname
+            , email
+            , mphon_no
+            , reg_dt
+            , corr_dt
+            , regr_id
+            , amd_id
+        from mintup.tbl_mu_user
+        where user_id = #{userId}
+    </select>
+</mapper>
