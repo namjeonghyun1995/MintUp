@@ -1,17 +1,16 @@
 package com.badminton.mintup.controller;
 
 import com.badminton.mintup.vo.AuthVo.LoginReqVo;
+import com.badminton.mintup.vo.CommonResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +31,7 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping(path = "/login")
-    public String login(@RequestBody LoginReqVo params, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public CommonResponse<Void> login(@RequestBody LoginReqVo params, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         /**
          * UserDetails              :사용자 정보
          * Spring Security 순서
@@ -50,6 +49,6 @@ public class AuthController {
         SecurityContextHolder.setContext(context);
         //인증 정보를 다음 요청에서도 사용할 수 있도록 저장
         securityContextRepository.saveContext(context, httpRequest, httpResponse);
-        return "로그인 성공";
+        return CommonResponse.success();
     }
 }
