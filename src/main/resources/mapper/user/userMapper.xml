@@ -5,34 +5,20 @@
 
 <mapper namespace="com.badminton.mintup.dao.UserDao">
 
-    <select id="userInfo" resultType="com.badminton.mintup.vo.UserVo$UserInfoVo">
+    <select id="getUserId">
         select
-            id
-            , user_id
-            , password
-            , nickname
-            , email
-            , mphon_no
-            , reg_dt
-            , corr_dt
-            , regr_id
-            , amd_id
-        from mintup.tbl_mu_user
-        where id = 1
+            user_id
+        from tbl_mu_user
+        where email = #{email}
     </select>
 
-    <select id="findByUserId" resultType="com.badminton.mintup.vo.UserVo$UserInfoVo">
+    <select id="userInfo" resultType="com.badminton.mintup.vo.UserVo$UserInfoVo">
         select
-            id
-            , user_id
+            user_id
             , password
             , nickname
             , email
             , mphon_no
-            , reg_dt
-            , corr_dt
-            , regr_id
-            , amd_id
         from mintup.tbl_mu_user
         where user_id = #{userId}
     </select>

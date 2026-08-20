@@ -6,17 +6,9 @@
 <mapper namespace="com.badminton.mintup.dao.AuthDao">
     <select id="findByUserId" resultType="com.badminton.mintup.vo.UserVo$UserInfoVo">
         select
-            id
-            , user_id
+            email
             , password
-            , nickname
-            , email
-            , mphon_no
-            , reg_dt
-            , corr_dt
-            , regr_id
-            , amd_id
         from mintup.tbl_mu_user
-        where user_id = #{userId}
+        where email = #{email}
     </select>
 </mapper>

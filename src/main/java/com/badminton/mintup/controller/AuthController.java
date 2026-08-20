@@ -1,7 +1,9 @@
 package com.badminton.mintup.controller;
 
+import com.badminton.mintup.service.UserService;
 import com.badminton.mintup.vo.AuthVo.LoginReqVo;
 import com.badminton.mintup.vo.CommonResponse;
+import com.badminton.mintup.vo.UserVo.UserInfoVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,11 +28,12 @@ public class AuthController {
 
     @Autowired
     private SecurityContextRepository securityContextRepository;
+
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserService userService;
 
     @PostMapping(path = "/login")
-    public CommonResponse<Void> login(@RequestBody LoginReqVo params, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public CommonResponse<UserInfoVo> login(@RequestBody LoginReqVo params, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         /**
          * UserDetails              :사용자 정보
          * Spring Security 순서
@@ -43,12 +45,12 @@ public class AuthController {
          * Authentication           : 인증 성공 결과
          * SecurityContext          : 인증 결과를 담아두는 곳
          */
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(params.getUserId(), params.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(params.getEmail(), params.getPassword()));
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
         //인증 정보를 다음 요청에서도 사용할 수 있도록 저장
         securityContextRepository.saveContext(context, httpRequest, httpResponse);
-        return CommonResponse.success();
+        return CommonResponse.success(userService.getUserInfo(params));
     }
 }
