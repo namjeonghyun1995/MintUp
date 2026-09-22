@@ -2,6 +2,7 @@ package com.badminton.mintup.controller;
 
 import com.badminton.mintup.common.Response;
 import com.badminton.mintup.service.UserService;
+import com.badminton.mintup.vo.UserVo.EmailExistsReqVo;
 import com.badminton.mintup.vo.UserVo.SignUpReqVo;
 import com.badminton.mintup.vo.UserVo.UpdatePasswordReqVo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,19 @@ public class UserController {
         return userService.signUp(params);
     }
 
+    // 이메일 중복 검사
+    @PostMapping(path = "/emailExists")
+    @ResponseBody
+    public Response emailExists(@RequestBody EmailExistsReqVo params) throws Exception {
+        return userService.emailExists(params);
+    }
+
     // 인증번호 검증
+    @PostMapping(path = "/otp")
+    @ResponseBody
+    public Response otp() throws Exception {
+        return new Response();
+    }
 
     // 비밀번호 변경
     @PostMapping(path = "/updatePassword")

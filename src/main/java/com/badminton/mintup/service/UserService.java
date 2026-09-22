@@ -6,6 +6,7 @@ import com.badminton.mintup.common.Response;
 import com.badminton.mintup.common.ResponseCode;
 import com.badminton.mintup.dao.UserDao;
 import com.badminton.mintup.vo.AuthVo.LoginReqVo;
+import com.badminton.mintup.vo.UserVo.EmailExistsReqVo;
 import com.badminton.mintup.vo.UserVo.SignUpReqVo;
 import com.badminton.mintup.vo.UserVo.UpdatePasswordReqVo;
 import com.badminton.mintup.vo.UserVo.UserInfoVo;
@@ -25,10 +26,12 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 사용자 정보 조회
     public UserInfoVo getUserInfo(LoginReqVo params) {
         return userDao.userInfo(userDao.getUserId(params.getEmail()));
     }
 
+    // 회원가입
     public Response signUp(SignUpReqVo params) throws Exception {
 
         // 이메일 유효성 검증
@@ -50,6 +53,15 @@ public class UserService {
         return new Response(userDao.userInfo(params.getUserId()));
     }
 
+    // 이메일 중복 검사
+    public Response emailExists(EmailExistsReqVo params) throws Exception {
+        if (userDao.getEmailExists(params.getEmail()) > 0) {
+            return new Response(ResponseCode.APPLICATION_ERROR.getCode(), "중복된 이메일입니다. 다른 이메일을 입력해주세요.");
+        }
+        return new Response();
+    }
+
+    // 비밀번호 수정
     public Response updatePassword(UpdatePasswordReqVo params) {
         params.setPassword(passwordEncoder.encode(params.getPassword()));
         if (userDao.updatePassword(params) <= 0) {

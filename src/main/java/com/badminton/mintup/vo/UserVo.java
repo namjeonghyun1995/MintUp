@@ -35,4 +35,9 @@ public class UserVo {
         private int userId;
         private String password;         // 사용자 비밀번호
     }
+
+    @Data
+    public static class EmailExistsReqVo {
+        private String email;
+    }
 }
