@@ -24,7 +24,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             // URL 권한 설정
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/api/auth/*").permitAll()
+                    .requestMatchers("/api/auth/*",
+                            "/api/user/signUp").permitAll()
                     .anyRequest().authenticated()
             )
             .securityContext(securityContext -> securityContext

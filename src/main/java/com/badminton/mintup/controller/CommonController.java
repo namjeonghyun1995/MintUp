@@ -7,4 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/api/common")
 public class CommonController {
 
+    // 이메일 발송
 }

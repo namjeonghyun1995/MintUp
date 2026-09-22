@@ -22,4 +22,33 @@
         from mintup.tbl_mu_user
         where user_id = #{userId}
     </select>
+
+    <select id="getEmailExists" resultType="java.lang.Integer">
+        select
+            count(*)
+        from mintup.tbl_mu_user
+        where email = #{email}
+    </select>
+
+    <insert id="signUp" keyProperty="userId" useGeneratedKeys="true">
+        insert into mintup.tbl_mu_user(
+            email
+            , password
+            , nickname
+            , mphon_no
+            , reg_dt
+        )values(
+            #{email}
+            , #{password}
+            , #{nickname}
+            , #{mphonNo}
+            , NOW()
+        );
+    </insert>
+
+    <update id="updatePassword">
+        update mintup.tbl_mu_user
+        set password = #{password}
+        where user_id = #{userId}
+    </update>
 </mapper>

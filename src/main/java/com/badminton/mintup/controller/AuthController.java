@@ -1,14 +1,16 @@
 package com.badminton.mintup.controller;
 
+import com.badminton.mintup.common.Response;
+import com.badminton.mintup.common.ResponseCode;
 import com.badminton.mintup.service.UserService;
 import com.badminton.mintup.vo.AuthVo.LoginReqVo;
-import com.badminton.mintup.vo.CommonResponse;
-import com.badminton.mintup.vo.UserVo.UserInfoVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -33,7 +35,7 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping(path = "/login")
-    public CommonResponse<UserInfoVo> login(@RequestBody LoginReqVo params, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public Response login(@RequestBody LoginReqVo params, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         /**
          * UserDetails              :사용자 정보
          * Spring Security 순서
@@ -45,12 +47,16 @@ public class AuthController {
          * Authentication           : 인증 성공 결과
          * SecurityContext          : 인증 결과를 담아두는 곳
          */
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(params.getEmail(), params.getPassword()));
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        //인증 정보를 다음 요청에서도 사용할 수 있도록 저장
-        securityContextRepository.saveContext(context, httpRequest, httpResponse);
-        return CommonResponse.success(userService.getUserInfo(params));
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(params.getEmail(), params.getPassword()));
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+            //인증 정보를 다음 요청에서도 사용할 수 있도록 저장
+            securityContextRepository.saveContext(context, httpRequest, httpResponse);
+            return new Response(userService.getUserInfo(params));
+        } catch (BadCredentialsException e) {
+            return new Response(ResponseCode.APPLICATION_ERROR.getCode(), "아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.");
+        }
     }
 }
